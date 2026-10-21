@@ -93,7 +93,7 @@ h1 { font-size: clamp(42px, 4.1vw, 62px); font-weight: 800; letter-spacing: -.05
 .copy-button:hover { color: var(--accent); background: var(--accent-soft); }
 .copy-button:active { transform: translateY(1px); }
 pre { margin: 0; padding: 18px 15px 22px; overflow-x: auto; max-width: 100%; font-size: 11.3px; line-height: 1.8; tab-size: 4; color: #343a32; scrollbar-width: thin; scrollbar-color: #b9bdb2 transparent; }
-pre code { font: inherit; white-space: pre; }
+pre code { font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
 .tok-keyword { color: #a52e29; font-weight: 600; }
 .tok-string { color: #586446; }
 .tok-number { color: #845e3c; }

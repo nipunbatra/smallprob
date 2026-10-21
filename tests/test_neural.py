@@ -59,7 +59,9 @@ def test_final_partial_batch_is_weighted_by_observations():
     vae = VAE(4, latent_dim=1, dtype="float64")
     constant_networks(vae, [0.], [1.], [-2., -1., .5, 1.])
     data = np.vstack([np.zeros((4, 4)), np.ones((1, 4))])
-    assert vae.evaluate(data, batch_size=2) == vae.evaluate(data, batch_size=5)
+    # Grouping the same observations changes floating-point summation order.
+    assert vae.evaluate(data, batch_size=2) == pytest.approx(
+        vae.evaluate(data, batch_size=5), rel=1e-12, abs=1e-12)
 
 
 def test_gradients_reach_encoder_and_decoder():
