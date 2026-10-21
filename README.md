@@ -10,10 +10,14 @@ and three runnable examples translated from Pyro. It supports Normal,
 HalfNormal, StudentT and Categorical distributions. Model definitions need no
 backend imports.
 
-The [personal showcase](docs/website.md) compares seven Smallprob and Pyro model
-definitions, with diagrams, saved results and runnable downloads. The full
-library lives in [nipunbatra/smallprob](https://github.com/nipunbatra/smallprob).
-It is a personal prototype, not a PyPI release.
+**[Explore the showcase](https://nipunbatra.github.io/smallprob/)** for seven
+Smallprob and Pyro model comparisons, with diagrams, saved results and runnable
+downloads. The website is static; run the Python examples locally using the
+instructions below. See [website setup](docs/website.md) to rebuild it.
+
+The full library lives in the public
+[nipunbatra/smallprob](https://github.com/nipunbatra/smallprob) repository.
+It is a personal research prototype, not a PyPI release.
 
 ```python
 from smallprob import model, Normal, HalfNormal

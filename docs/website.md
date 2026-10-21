@@ -1,4 +1,4 @@
-# Personal showcase
+# Smallprob showcase
 
 The static site is in `website/`. It pairs Smallprob model declarations with
 equivalent, idiomatic Pyro declarations for seven small examples. Pyro's
@@ -29,22 +29,23 @@ their sources so the same showcase works directly from a checkout.
 
 ## GitHub and publication
 
-Repository: <https://github.com/nipunbatra/smallprob>.
+Public repository: <https://github.com/nipunbatra/smallprob>.
 
-The repository is initially private. A private repository does **not** make a
-GitHub Pages site private. GitHub restricts access-controlled Pages to qualifying
-Enterprise Cloud organization repositories; personal-account Pages are public.
-See [GitHub's visibility documentation](https://docs.github.com/en/enterprise-cloud%40latest/pages/getting-started-with-github-pages/changing-the-visibility-of-your-github-pages-site).
+Public showcase: <https://nipunbatra.github.io/smallprob/>.
 
-The workflow `.github/workflows/checks.yml` tests the library and builds the
-showcase. Publication is deliberately disabled unless the repository variable
-`ENABLE_PUBLIC_PAGES` is set to `true`. Enabling that variable is a decision to
-publish the site publicly, including example code and downloadable notebooks.
-Keep it unset for private development.
+The [GitHub Actions workflow](../.github/workflows/checks.yml) runs on pushes to
+`main`, pull requests and manual dispatch. It installs the locked environment,
+tests the library and model comparisons, builds the showcase from the saved
+executed notebooks, and validates the generated site.
 
-After public publication is approved, configure Pages to use GitHub Actions,
-set the variable, and run the workflow. Private-source Pages may also require a
-paid GitHub plan; never change the repository's visibility just to bypass this
-requirement without the owner's approval. The expected project URL is
-`https://nipunbatra.github.io/smallprob/`; it is only live after a successful
-Pages deployment.
+For publication, configure the repository's Pages source as **GitHub Actions**
+and set the repository Actions variable `ENABLE_PUBLIC_PAGES` to `true`. On
+`main`, a successful check job uploads the built `website/` artifact; the
+dependent publish job deploys it to Pages. Pull requests run the checks without
+publishing. Leaving the variable unset or setting it to `false` skips future
+publication; it does not remove an already published site.
+
+The Pages deployment serves the static showcase, example code and downloadable
+notebooks publicly. It does not run Python or inference on a server. Check the
+workflow's `publish` job and the `github-pages` environment for deployment
+status.
