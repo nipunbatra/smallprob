@@ -118,11 +118,13 @@ class BoundModel:
 
     def infer(self, observed=None, *, method="auto", steps=None,
               learning_rate=None, particles=None, seed=None, backend=None,
-              device=None, dtype=None, **observations):
+              device=None, dtype=None, guide=None, **observations):
         """Infer with exact methods, or explicitly request approximate VI.
 
         ``infer(y=data)`` is shorthand for ``infer(observed={"y": data})``.
         Use the mapping form for variables named like inference options.
+        ``guide="diagonal"`` selects native PyTorch mean-field VI, without Pyro.
+        Omit it (or use ``guide="full"``) for the existing full-covariance backend.
         """
         from .inference import infer
 
@@ -138,7 +140,7 @@ class BoundModel:
         values = _validate_values(self.graph, values)
         options = {key: value for key, value in {
             "steps": steps, "learning_rate": learning_rate, "particles": particles,
-            "seed": seed,
+            "seed": seed, "guide": guide,
         }.items() if value is not None}
         result = infer(self.graph, values, method=method, backend=selected, **options)
         return Posterior(self.graph, result, selected)

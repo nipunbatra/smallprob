@@ -1,7 +1,8 @@
 """The seven probability models used by the static comparison site.
 
 Pyro strings are executable model definitions, not pseudocode. They keep the
-same probability laws and deliberately omit inference setup on both sides.
+same probability laws. Complete generation and inference recipes live in
+``site_workflows.py`` so model structure remains separate from inference.
 """
 from __future__ import annotations
 

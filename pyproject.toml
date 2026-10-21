@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "smallprob"
-version = "0.5.0"
+version = "0.6.0"
 description = "Small Python generative models with exact inference and optional variational inference"
 requires-python = ">=3.11"
 dependencies = ["numpy>=1.24,<3", "array-api-compat>=1.12,<2"]

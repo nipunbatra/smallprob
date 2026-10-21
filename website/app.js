@@ -6,6 +6,8 @@
   const codeTexts = new Map();
   const buttonTimers = new WeakMap();
   let activeIndex = 0;
+  let activeWorkflowId = "model";
+  let workflowSteps = [];
   let copyTimer;
 
   function showCopyStatus(message) {
@@ -171,12 +173,51 @@
     $("case-method").textContent = item.method || "Inference example";
     $("case-method").dataset.approximate = String(/variational|\bVI\b|approximate/i.test(item.method || ""));
     $("case-panel").setAttribute("aria-labelledby", `tab-${item.id}`);
-    paintCode("smallprob-code", item.smallprob);
-    paintCode("pyro-code", item.pyro);
-    paintCode("run-code", item.run);
+    $("smallprob-method").textContent = item.smallprob_method || item.method || "";
+    $("pyro-method").textContent = item.pyro_method || "See the complete example";
+    workflowSteps = [
+      {id: "model", label: "Define model", smallprob: item.smallprob, pyro: item.pyro},
+      ...(Array.isArray(item.workflows) ? item.workflows : []),
+    ];
+    if (!workflowSteps.some((step) => step.id === activeWorkflowId)) activeWorkflowId = "model";
+    $("workflow-tabs").replaceChildren();
+    workflowSteps.forEach((step, stepIndex) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "workflow-tab";
+      button.id = `workflow-${step.id}`;
+      button.setAttribute("role", "tab");
+      button.setAttribute("aria-controls", "comparison-panel");
+      const number = document.createElement("span");
+      number.className = "workflow-number";
+      number.setAttribute("aria-hidden", "true");
+      number.textContent = String(stepIndex + 1).padStart(2, "0");
+      button.append(number, document.createTextNode(step.label));
+      button.addEventListener("click", () => renderWorkflow(step.id));
+      button.addEventListener("keydown", (event) => {
+        let next;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (stepIndex + 1) % workflowSteps.length;
+        else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (stepIndex - 1 + workflowSteps.length) % workflowSteps.length;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = workflowSteps.length - 1;
+        if (next !== undefined) {
+          event.preventDefault();
+          renderWorkflow(workflowSteps[next].id);
+          $("workflow-tabs").children[next].focus({preventScroll: true});
+        }
+      });
+      $("workflow-tabs").appendChild(button);
+    });
+    renderWorkflow(activeWorkflowId);
     $("case-result").textContent = item.result || "Run the example to inspect its posterior.";
     $("example-download").href = item.download || "https://github.com/nipunbatra/smallprob";
-    $("example-download").setAttribute("aria-label", `Download the runnable ${item.title} example`);
+    $("example-download").setAttribute("aria-label", `Download the complete Smallprob script for ${item.title}`);
+    $("pyro-download").hidden = !item.pyro_download;
+    if (item.pyro_download) {
+      $("pyro-download").href = item.pyro_download;
+      $("pyro-download").setAttribute("download", "");
+      $("pyro-download").setAttribute("aria-label", `Download the complete Pyro script for ${item.title}`);
+    }
     $("diagram-full").href = item.diagram || "#";
     $("diagram-link").href = item.diagram || "#";
     setImage($("case-diagram"), item.diagram || "", `${item.title}: generated graphical model and mathematical equations`);
@@ -212,10 +253,25 @@
     document.title = `${item.title} · Smallprob`;
   }
 
+  function renderWorkflow(id) {
+    const step = workflowSteps.find((value) => value.id === id) || workflowSteps[0];
+    if (!step) return;
+    activeWorkflowId = step.id;
+    paintCode("smallprob-code", step.smallprob);
+    paintCode("pyro-code", step.pyro);
+    $("workflow-note").textContent = step.note || cases[activeIndex].workflow_note || "";
+    $("comparison-panel").setAttribute("aria-labelledby", `workflow-${step.id}`);
+    Array.from($("workflow-tabs").children).forEach((button, index) => {
+      const selected = workflowSteps[index].id === step.id;
+      button.setAttribute("aria-selected", String(selected));
+      button.tabIndex = selected ? 0 : -1;
+    });
+  }
+
   function followHash() {
     let requested;
     try { requested = decodeURIComponent(window.location.hash.slice(1)); } catch (_) { requested = ""; }
-    if (requested === "get-started" || requested === "examples") return;
+    if (["get-started", "examples", "notebooks", "neural-models"].includes(requested)) return;
     const index = cases.findIndex((item) => item.id === requested);
     renderCase(index >= 0 ? index : 0);
     if (requested && index < 0) {

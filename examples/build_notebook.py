@@ -19,11 +19,11 @@ import torch
 import matplotlib.pyplot as plt
 from smallprob import model, Normal, HalfNormal, StudentT, HMM
 
-plt.rcParams.update({
-    "figure.figsize": (8, 3), "axes.spines.top": False,
-    "axes.spines.right": False,
-    "axes.prop_cycle": plt.cycler(color=["#17464b", "#c67b51"]),
-})"""),
+from smallprob.plotting import use_style
+from matplotlib_inline.backend_inline import set_matplotlib_formats
+
+use_style()  # readable labels, 150-dpi display, 300-dpi file export
+set_matplotlib_formats("svg", "retina")  # sharp at any zoom + high-resolution PNG"""),
         md("""## 1. A Normal observation
 An unknown mean, then one noisy observation. In Python, `Normal(mean, sd)` takes standard deviation. The diagram writes the mathematical variance explicitly."""),
         code("""@model

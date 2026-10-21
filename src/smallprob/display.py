@@ -600,7 +600,7 @@ class ModelDiagram:
         figure = self._figure()
         buffer = BytesIO()
         try:
-            figure.savefig(buffer, format=format, dpi=180, facecolor=figure.get_facecolor())
+            figure.savefig(buffer, format=format, dpi=300, facecolor=figure.get_facecolor())
         except ValueError as exc:
             raise ModelError(f"Cannot render mathematical labels: {exc}") from exc
         finally:

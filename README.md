@@ -3,17 +3,17 @@
 Describe a generative model in ordinary Python. Generate data and infer unknowns
 from the same definition. No plates, tensor dimensions or manual sample names.
 
-Version 0.5 is a small research prototype with NumPy and PyTorch array
-execution, exact linear Gaussian/HMM inference, optional variational inference,
-and notebook-ready model diagrams. It adds a loop-free `HMM(...)` constructor
-and three runnable examples translated from Pyro. It supports Normal,
-HalfNormal, StudentT and Categorical distributions. Model definitions need no
-backend imports.
+Version 0.6 is a small research prototype with NumPy and PyTorch array
+execution, exact linear Gaussian/HMM inference, native diagonal VI,
+optional full-covariance Pyro VI, and notebook-ready model diagrams. A separate
+`smallprob.neural.VAE` helper adds minibatch neural training for binary data.
+The graph API supports Normal, HalfNormal, StudentT and Categorical variables.
 
 **[Explore the showcase](https://nipunbatra.github.io/smallprob/)** for seven
-Smallprob and Pyro model comparisons, with diagrams, saved results and runnable
-downloads. The website is static; run the Python examples locally using the
-instructions below. See [website setup](docs/website.md) to rebuild it.
+complete Smallprob/Pyro workflows: define, generate, fit, and use the posterior.
+Then try [native mean-field VI](https://nipunbatra.github.io/smallprob/meanfield.html)
+and the [VAE example](https://nipunbatra.github.io/smallprob/neural.html).
+Downloadable scripts run locally; the website displays executed results.
 
 The full library lives in the public
 [nipunbatra/smallprob](https://github.com/nipunbatra/smallprob) repository.
@@ -36,6 +36,55 @@ print(p.mean("sigma"), p.interval("sigma"))
 
 Inside `@model`, a distribution declaration introduces a random variable.
 `draw(...)` remains supported, and `return` is optional.
+
+## Native VI: independent Normal factors
+
+```python
+p = regression(x_data).infer(y=y_data, method="vi", guide="diagonal", seed=7)
+```
+
+This engine uses PyTorch directly and does not import Pyro. It learns a mean
+and log scale per unconstrained latent, with reparameterized Monte Carlo and
+analytic guide entropy. Positive sites use lognormal guide marginals, including
+the change-of-variable Jacobian. Independence is a guide assumption, not a
+restriction on model dependencies. It can underestimate uncertainty when the
+posterior is correlated; see the exact and quadrature checks in
+[the native VI example](examples/meanfield.py).
+
+For compatibility, `method="vi"` still selects the existing full-covariance
+Pyro backend; `guide="full"` makes that explicit. Install `.[torch]` for native
+VI and `.[vi]` for the optional Pyro backend/comparisons. Automatic inference
+remains exact-only.
+
+## Neural generative models
+
+```python
+from smallprob.neural import VAE
+
+vae = VAE(input_dim=64, latent_dim=2, hidden_dim=64, seed=7)
+history = vae.fit(binary_images, epochs=200, batch_size=64, seed=7)
+reconstructed_probabilities = vae.reconstruct(binary_images[:8])
+new_images = vae.generate(8, seed=8)
+```
+
+The helper uses a diagonal Normal encoder, standard Normal latent prior, and
+Bernoulli decoder. It trains with native PyTorch and minibatches. Inputs are
+binary `N × D` arrays/tensors; reconstructed probabilities and sampled images
+have different meanings. This is an explicit neural API, separate from the
+finite scalar graph traced by `@model`. See [the API and scope](docs/neural.md)
+and run `python -m examples.vae` for synthetic 8×8 images, a held-out check,
+reconstructions, generation and a runnable Pyro companion.
+
+## Consistent, sharp plots
+
+```python
+from smallprob.plotting import use_style
+use_style()  # 150-dpi display, 300-dpi PNG export; SVG/PDF stay vector
+```
+
+Use `with plot_style():` for temporary settings. Importing the library does not
+change Matplotlib defaults. The committed notebooks include SVG and retina PNG
+outputs; website plots use SVG.
 
 ## Run it
 
@@ -426,7 +475,7 @@ error; there is no silent switch to an inaccurate approximation.
 
 VI currently supports continuous Normal/HalfNormal/StudentT graphs, not
 Categorical latents. HMM state inference stays exact on NumPy; HMM parameter
-learning, MCMC and minibatching remain outside this version.
+learning and MCMC remain outside this version. General graph minibatching is not supported; the separate VAE helper supports minibatch neural training.
 
 The Gaussian engine builds dense innovation factors and is meant for small
 examples. Normal/StudentT broadcasting and ordinary Python loops expand into scalar

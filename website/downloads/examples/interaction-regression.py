@@ -7,8 +7,10 @@ The script prints inference results and saves an SVG in the current directory.
 - Adaptation: fixed synthetic data replace GDP data, and HalfNormal(1) replaces Uniform(0, 10) for noise SD. The prior change changes the model.
 - Both code panes use the adapted prior. The plot shows 90% guide bands for mean responses, excluding new observation noise.
 - Against independent numerical integration, the saved fit's largest mean error is 0.126 reference SD and largest SD error is 9.5%. These checks do not establish accurate tails.
+- The saved result uses guide="full" (Pyro-backed VI). Choose guide="diagonal" for Smallprob's independent Normal guide implemented directly in Torch; it cannot learn posterior correlations.
 
 Pyro's regression tutorial: https://pyro.ai/examples/intro_long.html#example-from-maximum-likelihood-regression-to-bayesian-regression
+Pyro automatic Gaussian guides: https://docs.pyro.ai/en/stable/infer.autoguide.html#pyro.infer.autoguide.AutoMultivariateNormal
 """
 
 from smallprob import model, Normal, HalfNormal
@@ -30,6 +32,13 @@ regression = interaction_regression(group, x)
 truth = {"intercept": 1.2, "group_effect": 0.7,
          "slope": -0.6, "interaction": 0.9, "sigma": 0.5}
 data = regression.simulate(seed=103, fixed=truth)
-posterior = regression.infer(y=data["y"][0], method="vi", steps=4000, seed=11)
+y = data["y"][0]
+
+posterior = regression.infer(y=y, method="vi", guide="full", steps=4000, seed=11)
+
+draws = posterior.sample(4000, seed=12)
+group_0_slope = draws["slope"]
+group_1_slope = draws["slope"] + draws["interaction"]
+print(group_0_slope.mean(), group_1_slope.mean())
 print(posterior.mean("interaction"), posterior.interval("interaction"))
 regression.diagram(labels={"intercept": "b", "slope": "m", "group_effect": "a", "interaction": "c"}, observed=["y"]).save("interaction-regression-model.svg")

@@ -1,4 +1,4 @@
-# Smallprob 0.5 design
+# Smallprob 0.6 design
 
 The model describes a generative process. Inference is a separate choice made
 when observations are supplied. Ordinary Python is the surface language;
@@ -237,3 +237,24 @@ Categorical VI, HMM parameter fitting, MCMC, minibatches, additional Array API
 backends and neural-network models are outside scope. A future HMM parameter backend can
 marginalise discrete states with a differentiable forward recursion and then
 fit continuous parameters, while retaining the same model notation.
+
+## Native diagonal VI and neural training
+
+`meanfield.py` reuses the Torch expression compiler and detached result adapter,
+but implements optimization directly with Torch Adam. `guide="diagonal"`
+selects this engine without importing Pyro. It optimizes location and log-SD
+vectors, estimates expected log joint plus support Jacobians with antithetic
+samples, and adds analytic Normal entropy. A separate IID evaluation estimates
+the ELBO and Monte Carlo standard error. The guide's diagonal factor is adapted
+to the common sampling API; no off-diagonal entries are optimized. The old
+full-covariance backend remains the default for compatibility.
+
+`neural.py` is an explicit, separate VAE helper, not an expansion of the scalar
+graph language. It implements a diagonal amortized Normal encoder, standard
+Normal prior, Bernoulli decoder and minibatch training with analytic KL. Model
+weights are point estimates; the helper does not infer a Bayesian posterior over
+network weights. See docs/neural.md for its shape/device and return contracts.
+
+`plotting.py` imports Matplotlib only when a style is requested. `use_style()`
+updates rcParams explicitly; `plot_style()` scopes the same settings. Notebook
+outputs retain vector SVG and retina PNG, and raster exports default to 300 dpi.

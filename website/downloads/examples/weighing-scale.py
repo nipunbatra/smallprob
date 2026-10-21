@@ -8,6 +8,7 @@ The script prints inference results and saves an SVG in the current directory.
 - Pyro labels this older tutorial deprecated. The analytic posterior is Normal with mean 9.14 and SD 0.60.
 
 Pyro's scale example: https://pyro.ai/examples/intro_part_ii.html
+Pyro automatic Gaussian guides: https://docs.pyro.ai/en/stable/infer.autoguide.html#pyro.infer.autoguide.AutoMultivariateNormal
 """
 
 from smallprob import model, Normal
@@ -19,6 +20,9 @@ def weighing_scale(guess=8.5):
 
 scale = weighing_scale()
 generated = scale.simulate(draws=5, seed=7)
-posterior = scale.infer(measurement=9.5)
+measurement = 9.5  # Illustrative reading; generated is prior predictive.
+
+posterior = scale.infer(measurement=measurement)
+
 print(posterior.mean("weight"), posterior.sd("weight"))
 scale.diagram(labels={"weight": "w", "measurement": "y"}, observed=["measurement"]).save("weighing-scale-model.svg")

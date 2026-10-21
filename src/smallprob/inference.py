@@ -46,6 +46,12 @@ def infer(graph: Graph, observed: dict[str, float], method: str = "auto", *, bac
     from .arrays import infer_backend
     selected = infer_backend(backend=backend)
     if method == "vi":
+        guide = options.pop("guide", "full")
+        if guide == "diagonal":
+            from .meanfield import infer_meanfield
+            return infer_meanfield(graph, dict(observed), device=selected.device, dtype=selected.dtype, **options)
+        if guide != "full":
+            raise ValueError("guide must be 'diagonal' (native PyTorch) or 'full' (Pyro).")
         from .vi import infer_vi
         return infer_vi(graph, dict(observed), device=selected.device, dtype=selected.dtype, **options)
     if options:

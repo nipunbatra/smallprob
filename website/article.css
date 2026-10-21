@@ -1,0 +1,11 @@
+.article-page .intro { display: block; max-width: 890px; }
+.article-page .intro h1 { font-size: clamp(38px, 4vw, 58px); }
+.article-section { border-top: 1px solid var(--line); padding: 28px 0 32px; }
+.article-section h2 { font-size: 26px; letter-spacing: -.025em; margin-bottom: 17px; }
+.article-section > p { font-size: 15px; line-height: 1.85; max-width: 880px; margin: 16px 0; }
+.article-section .comparison-grid { margin: 25px 0 15px; }
+.article-section .code-heading a { font-size: 11px; }
+.article-section figcaption { font-size: 12px; line-height: 1.7; color: var(--muted); padding: 15px 0; }
+.article-section .formula { font: 21px/2.1 Georgia, serif; border-left: 3px solid var(--accent); padding: 14px 24px; background: var(--code); overflow-wrap: anywhere; }
+.article-section > pre { background: var(--code); margin-top: 20px; padding: 20px; font-size: 12px; }
+@media (max-width: 600px) { .article-section .formula { font-size: 16px; padding: 12px 15px; } .article-section > p { font-size: 14px; } }

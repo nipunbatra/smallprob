@@ -21,11 +21,11 @@ from examples.pyro_gallery import (
     SCHOOL_EFFECTS, SCHOOL_SE, schools_reference, pyro_log_joint_checks,
 )
 
-plt.rcParams.update({
-    "figure.figsize": (8, 3.5), "axes.spines.top": False,
-    "axes.spines.right": False,
-    "axes.prop_cycle": plt.cycler(color=["#17464b", "#c67b51", "#8b8caa"]),
-})"""),
+from smallprob.plotting import use_style
+from matplotlib_inline.backend_inline import set_matplotlib_formats
+
+use_style()  # readable labels, 150-dpi display, 300-dpi file export
+set_matplotlib_formats("svg", "retina")  # sharp at any zoom + high-resolution PNG"""),
         md("""## 1. How much does the object weigh?
 Source: [Pyro's scale example](https://pyro.ai/examples/intro_part_ii.html). Pyro labels this older tutorial deprecated, but the example is still useful. This is the same probability model: a prior guess of 8.5, prior SD 1, and measurement SD 0.75. We observe 9.5."""),
         code("""@model
@@ -50,7 +50,7 @@ def normal_density(values, mean, sd):
 
 plt.plot(grid, normal_density(grid, 8.5, 1), "--", label="Prior")
 plt.plot(grid, normal_density(grid, 9.14, 0.6), label="Exact posterior")
-plt.axvline(9.5, color="#8b8caa", linestyle=":", label="Observed measurement")
+plt.axvline(9.5, color="#80704b", linestyle=":", label="Observed measurement")
 plt.xlabel("Weight"); plt.ylabel("Density"); plt.legend(); plt.show()"""),
         md("""## 2. Does the slope differ between groups?
 Source: [Pyro's regression example](https://pyro.ai/examples/intro_long.html#example-from-maximum-likelihood-regression-to-bayesian-regression). We preserve its intercept, two predictors and interaction, with Normal coefficient priors. **Adaptation:** use a fixed synthetic dataset instead of GDP data, and HalfNormal(1) instead of Uniform(0, 10) for the noise SD. The prior change changes the model.
@@ -79,7 +79,7 @@ p_known = interaction_known_noise(group, x, noise=0.5).infer(y=y)
 print(f"Known-noise exact interaction mean: {p_known.mean('interaction'):.3f}")"""),
         code("""draws = p_interaction.sample(2000, seed=12)
 grid = np.linspace(x.min(), x.max(), 100)
-for g, color in [(0, "#17464b"), (1, "#c67b51")]:
+for g, color in [(0, "#b52d24"), (1, "#246892")]:
     selected = group == g
     lines = (draws["intercept"][:, None] + g * draws["group_effect"][:, None]
              + (draws["slope"] + g * draws["interaction"])[:, None] * grid)
@@ -120,7 +120,7 @@ plt.errorbar(SCHOOL_EFFECTS, positions + 0.12, xerr=1.645 * SCHOOL_SE,
              fmt="o", alpha=0.5, label="Observed estimate ± 1.645 SE")
 plt.errorbar(means, positions - 0.12, xerr=[means - low, high - means],
              fmt="o", label="VI effect: mean and 90% guide interval")
-plt.axvline(p_schools.mean("mu"), linestyle=":", color="#8b8caa", label="VI population mean")
+plt.axvline(p_schools.mean("mu"), linestyle=":", color="#80704b", label="VI population mean")
 plt.yticks(positions, [f"School {i + 1}" for i in positions])
 plt.xlabel("Effect")
 plt.legend(fontsize=9, loc="upper center", bbox_to_anchor=(0.5, 1.27))
@@ -145,7 +145,7 @@ for label, posterior, names, reference in cases:
     sd_error = np.max(np.abs(sd / reference["sd"] - 1))
     print(f"{label}: largest mean error = {mean_error:.3f} reference SD; SD error = {sd_error:.1%}")
     assert mean_error < 0.35 and sd_error < 0.20  # existing, predeclared limits"""),
-        md("""The complete report also checks grid refinement and range expansion. Run `python -m examples.pyro_gallery` to regenerate it. Bernoulli/logistic models, learned mixture weights, VAEs and general discrete VI still need additional distribution or inference support."""),
+        md("""The complete report also checks grid refinement and range expansion. Run `python -m examples.pyro_gallery` to regenerate it. The separate `smallprob.neural.VAE` helper adds minibatch neural training for binary observations. General Bernoulli/logistic graphs, learned mixture weights and discrete VI still need additional support in `@model`."""),
     ]
     notebook = nb.v4.new_notebook(cells=cells, metadata={
         "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},

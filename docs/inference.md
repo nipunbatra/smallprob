@@ -204,6 +204,28 @@ From the project root:
 These examples supplement the original four-example introduction; they do not
 claim support for the entire Pyro tutorial catalogue.
 
+## Native mean-field inference
+
+Select `method="vi", guide="diagonal"` for an implementation using only PyTorch.
+The guide factors are independent Normals in unconstrained space; HalfNormal
+latents use exp transforms and include their log-Jacobians. Unknown Normal or
+StudentT scale parameters can depend on positive latents. Adam optimizes means
+and log scales using reparameterized samples and analytic Normal entropy. A
+fresh IID sample set supplies the reported ELBO estimate and its standard error.
+
+For a Gaussian posterior with precision Λ, the optimal diagonal guide has the
+posterior mean and variances `1 / diag(Λ)`. These are generally smaller than
+`diag(inv(Λ))`, the actual marginal posterior variances. The validation explicitly
+checks both centered and correlated regression, plus unknown-noise quadrature;
+it does not mistake structural guide error for optimizer error. Run
+`python -m examples.meanfield` to regenerate the six-fit reference study.
+
+The existing default VI backend is unchanged: `guide="full"` selects Pyro's
+full-covariance guide. Both engines return the same posterior API. Native VI
+needs the `torch` extra, not `vi`. Neither guide is a general multimodal posterior
+representation. The separate [VAE](neural.md) uses amortized diagonal guides and
+minibatches; it is not processed through `@model`.
+
 ## Next extensions and current exclusions
 
 For hybrid HMM parameter inference, a differentiable forward recursion could
@@ -211,7 +233,7 @@ marginalise discrete states before applying VI to continuous parameters.
 Arbitrary discrete structures need additional estimators or enumeration
 strategies; continuous reparameterisation is not sufficient.
 
-Version 0.5 does not implement categorical VI, MCMC, HMM parameter estimation,
+The scalar graph API does not implement categorical VI, MCMC, HMM parameter estimation,
 minibatching, other Array API backends, full Python control flow over random
 values, or multidimensional event distributions. One-dimensional Normal and
 StudentT declarations expand to scalar sites; they do not introduce a

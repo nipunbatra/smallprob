@@ -9,6 +9,7 @@ The script prints inference results and saves an SVG in the current directory.
 - The Pyro pane expresses this same joint law with named time sites. Pyro also has specialized HMM distributions and enumeration tools; this is not a port of its richer piano-sequence tutorial.
 
 Pyro HMM tutorial (broader scope): https://pyro.ai/examples/hmm.html
+Pyro exact state marginals: https://docs.pyro.ai/en/stable/inference_algos.html#pyro.infer.traceenum_elbo.TraceEnum_ELBO.compute_marginals
 """
 
 from smallprob import HMM, Normal
@@ -22,6 +23,10 @@ chain = HMM(
 )
 
 data = chain.simulate(seed=7)
-posterior = chain.infer(y=data["y"][0])
-print(posterior.probabilities("z")[:, 1])
+y = data["y"][0]
+
+posterior = chain.infer(y=y)
+
+probabilities = posterior.probabilities("z")
+print(probabilities[:, 1])
 chain.diagram(observed=["y"]).save("hidden-markov-model.svg")

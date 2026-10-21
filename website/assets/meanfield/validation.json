@@ -1,0 +1,199 @@
+{
+  "backend": "native PyTorch; Pyro not imported",
+  "guide": "independent Normal factors; lognormal positive sites",
+  "seeds": [
+    0,
+    7,
+    19
+  ],
+  "known_noise": [
+    {
+      "centered": true,
+      "seed": 0,
+      "mean": [
+        0.9290198193808931,
+        -0.8561190246486994
+      ],
+      "sd": [
+        0.10676561943809292,
+        0.11685061697319436
+      ],
+      "exact_mean": [
+        0.9290198193808932,
+        -0.856119024648699
+      ],
+      "exact_sd": [
+        0.10604216037548606,
+        0.11867169593509194
+      ],
+      "diagonal_optimum_sd": [
+        0.10604216037548606,
+        0.11867169593509193
+      ],
+      "max_mean_error_reference_sd": 2.8066246526865137e-15,
+      "max_sd_error_diagonal_optimum": 0.01534552066141881
+    },
+    {
+      "centered": true,
+      "seed": 7,
+      "mean": [
+        0.9290198193808931,
+        -0.8561190246486994
+      ],
+      "sd": [
+        0.10577052943776608,
+        0.11979044570722633
+      ],
+      "exact_mean": [
+        0.9290198193808932,
+        -0.856119024648699
+      ],
+      "exact_sd": [
+        0.10604216037548606,
+        0.11867169593509194
+      ],
+      "diagonal_optimum_sd": [
+        0.10604216037548606,
+        0.11867169593509193
+      ],
+      "max_mean_error_reference_sd": 2.8066246526865137e-15,
+      "max_sd_error_diagonal_optimum": 0.009427267077621426
+    },
+    {
+      "centered": true,
+      "seed": 19,
+      "mean": [
+        0.9290198193808931,
+        -0.8561190246486994
+      ],
+      "sd": [
+        0.10815675700689294,
+        0.11727799728802195
+      ],
+      "exact_mean": [
+        0.9290198193808932,
+        -0.856119024648699
+      ],
+      "exact_sd": [
+        0.10604216037548606,
+        0.11867169593509194
+      ],
+      "diagonal_optimum_sd": [
+        0.10604216037548606,
+        0.11867169593509193
+      ],
+      "max_mean_error_reference_sd": 2.8066246526865137e-15,
+      "max_sd_error_diagonal_optimum": 0.019941093466214532
+    },
+    {
+      "centered": false,
+      "seed": 0,
+      "mean": [
+        2.209821119479467,
+        -0.8542517737890788
+      ],
+      "sd": [
+        0.10719258728045455,
+        0.0602454302450219
+      ],
+      "exact_mean": [
+        2.2098211194794657,
+        -0.8542517737890779
+      ],
+      "exact_sd": [
+        0.20703398213843072,
+        0.11859659485958977
+      ],
+      "diagonal_optimum_sd": [
+        0.10604216037548606,
+        0.060744806249624354
+      ],
+      "max_mean_error_reference_sd": 7.489071846891283e-15,
+      "max_sd_error_diagonal_optimum": 0.010848769026347016
+    },
+    {
+      "centered": false,
+      "seed": 7,
+      "mean": [
+        2.2098211194794675,
+        -0.8542517737890789
+      ],
+      "sd": [
+        0.10436389974057175,
+        0.060084350344052476
+      ],
+      "exact_mean": [
+        2.2098211194794657,
+        -0.8542517737890779
+      ],
+      "exact_sd": [
+        0.20703398213843072,
+        0.11859659485958977
+      ],
+      "diagonal_optimum_sd": [
+        0.10604216037548606,
+        0.060744806249624354
+      ],
+      "max_mean_error_reference_sd": 8.580025467570398e-15,
+      "max_sd_error_diagonal_optimum": 0.015826352735286875
+    },
+    {
+      "centered": false,
+      "seed": 19,
+      "mean": [
+        2.2098211194794675,
+        -0.8542517737890789
+      ],
+      "sd": [
+        0.10790922185906704,
+        0.060259260789441
+      ],
+      "exact_mean": [
+        2.2098211194794657,
+        -0.8542517737890779
+      ],
+      "exact_sd": [
+        0.20703398213843072,
+        0.11859659485958977
+      ],
+      "diagonal_optimum_sd": [
+        0.10604216037548606,
+        0.060744806249624354
+      ],
+      "max_mean_error_reference_sd": 8.580025467570398e-15,
+      "max_sd_error_diagonal_optimum": 0.017606784669134345
+    }
+  ],
+  "unknown_noise": {
+    "mean": [
+      0.9294985913499593,
+      -0.8579655989618846,
+      0.5064896310782294
+    ],
+    "sd": [
+      0.08834793404604795,
+      0.09767435434571191,
+      0.06280087558757659
+    ],
+    "reference_mean": [
+      0.9291352730427497,
+      -0.8562522770268197,
+      0.505841051120931
+    ],
+    "reference_sd": [
+      0.09021904907652224,
+      0.10096532728590434,
+      0.06840550810737196
+    ],
+    "max_mean_error_reference_sd": 0.016969409015168906,
+    "max_sd_relative_error": 0.08193247407793713
+  },
+  "caveat": "The mean-field optimum has variance 1 / diag(posterior precision), not diag(posterior covariance).",
+  "unknown_reference": "Independent numerical quadrature, refined from 4097 to 8193 points and wider bounds.",
+  "thresholds": {
+    "known_mean_reference_sd": 0.2,
+    "sd_diagonal_optimum_relative": 0.15,
+    "unknown_mean_reference_sd": 0.35
+  },
+  "passed": true
+}

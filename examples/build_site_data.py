@@ -10,83 +10,23 @@ import hashlib
 import json
 from pathlib import Path
 import re
-import textwrap
 
 import nbformat
 
 from examples.site_models import PYRO_MODELS, bound_cases, comparison_checks, smallprob_code
+from examples.site_workflows import WORKFLOW_NOTE, pyro_download_source, workflows
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "website"
 
-RUN_CODE = {
-    "normal-mean": '''
-simple = normal_observation()
-generated = simple.simulate(draws=5, seed=7)
-posterior = simple.infer(y=2.0)
-print(posterior.mean("mu"), posterior.sd("mu"))
-simple.diagram(observed=["y"]).save("normal-mean-model.svg")
-''',
-    "linear-regression": '''
-import numpy as np
-
-x = np.linspace(-2, 2, 30)
-line = regression(x)
-data = line.simulate(seed=7, fixed={"intercept": 1.5, "slope": -0.8})
-posterior = line.infer(y=data["y"][0])
-print(posterior.mean("slope"), posterior.interval("slope"))
-line.diagram(labels={"intercept": "b", "slope": "m"}, observed=["y"]).save("linear-regression-model.svg")
-''',
-    "robust-regression": '''
-import numpy as np
-
-x = np.linspace(-2, 2, 30)
-robust = robust_regression(x)
-generated = robust.simulate(seed=7)
-# Reproduce the notebook's Normal data, then add two outliers.
-y = 1.5 - 0.8 * x + np.random.default_rng(7).normal(0, 0.35, len(x))
-y[[5, 24]] += [3.0, -3.0]
-posterior = robust.infer(y=y, method="vi", seed=7)
-print(posterior.mean("m"), posterior.interval("m"))
-robust.diagram(observed=["y"]).save("robust-regression-model.svg")
-''',
-    "hidden-markov-model": '''
-data = chain.simulate(seed=7)
-posterior = chain.infer(y=data["y"][0])
-print(posterior.probabilities("z")[:, 1])
-chain.diagram(observed=["y"]).save("hidden-markov-model.svg")
-''',
-    "weighing-scale": '''
-scale = weighing_scale()
-generated = scale.simulate(draws=5, seed=7)
-posterior = scale.infer(measurement=9.5)
-print(posterior.mean("weight"), posterior.sd("weight"))
-scale.diagram(labels={"weight": "w", "measurement": "y"}, observed=["measurement"]).save("weighing-scale-model.svg")
-''',
-    "interaction-regression": '''
-import numpy as np
-
-x = np.tile(np.linspace(-1.5, 1.5, 20), 2)
-group = np.repeat([0., 1.], 20)
-regression = interaction_regression(group, x)
-truth = {"intercept": 1.2, "group_effect": 0.7,
-         "slope": -0.6, "interaction": 0.9, "sigma": 0.5}
-data = regression.simulate(seed=103, fixed=truth)
-posterior = regression.infer(y=data["y"][0], method="vi", steps=4000, seed=11)
-print(posterior.mean("interaction"), posterior.interval("interaction"))
-regression.diagram(labels={"intercept": "b", "slope": "m", "group_effect": "a", "interaction": "c"}, observed=["y"]).save("interaction-regression-model.svg")
-''',
-    "eight-schools": '''
-se = np.array([15., 10., 16., 11., 9., 11., 10., 18.])
-y = np.array([28., 8., -3., 7., -1., 1., 18., 12.])
-schools = eight_schools(se)
-generated = schools.simulate(draws=2, seed=7)
-posterior = schools.infer(y=y, method="vi", steps=4000, seed=11)
-draws = posterior.sample(6000, seed=12)
-effects = draws["mu"][:, None] + draws["tau"][:, None] * draws["eta"]
-print(effects.mean(axis=0))
-schools.diagram(observed=["y"]).save("eight-schools-model.svg")
-''',
+DIAGRAM_CODE = {
+    "normal-mean": 'simple.diagram(observed=["y"]).save("normal-mean-model.svg")',
+    "linear-regression": 'line.diagram(labels={"intercept": "b", "slope": "m"}, observed=["y"]).save("linear-regression-model.svg")',
+    "robust-regression": 'robust.diagram(observed=["y"]).save("robust-regression-model.svg")',
+    "hidden-markov-model": 'chain.diagram(observed=["y"]).save("hidden-markov-model.svg")',
+    "weighing-scale": 'scale.diagram(labels={"weight": "w", "measurement": "y"}, observed=["measurement"]).save("weighing-scale-model.svg")',
+    "interaction-regression": 'regression.diagram(labels={"intercept": "b", "slope": "m", "group_effect": "a", "interaction": "c"}, observed=["y"]).save("interaction-regression-model.svg")',
+    "eight-schools": 'schools.diagram(observed=["y"]).save("eight-schools-model.svg")',
 }
 
 METADATA = [
@@ -202,10 +142,27 @@ def build(destination=SITE):
             notebook_name, result_prefix, plot_prefix = OUTPUTS[case_id]
             notebook = notebooks[notebook_name]
             case.update(smallprob=smallprob_code(case_id), pyro=PYRO_MODELS[case_id].strip(),
-                        run=textwrap.dedent(RUN_CODE[case_id]).strip(),
                         result=_result(notebook, case_id, result_prefix),
                         diagram=f"assets/diagrams/{case_id}.svg", plot=None,
-                        download=f"downloads/examples/{case_id}.py")
+                        download=f"downloads/examples/{case_id}.py",
+                        pyro_download=f"downloads/examples/{case_id}-pyro.py",
+                        smallprob_method=("Approximate VI · full-covariance Gaussian guide" if case_id in {
+                            "robust-regression", "interaction-regression", "eight-schools"} else case["method"]),
+                        pyro_method=("Exact enumeration of hidden states" if case_id == "hidden-markov-model"
+                                     else "Approximate VI · full-covariance Gaussian guide"),
+                        workflows=workflows(case_id), workflow_note=WORKFLOW_NOTE)
+            inference_source = ({"label": "Pyro exact state marginals", "url":
+                "https://docs.pyro.ai/en/stable/inference_algos.html#pyro.infer.traceenum_elbo.TraceEnum_ELBO.compute_marginals"}
+                if case_id == "hidden-markov-model" else {"label": "Pyro automatic Gaussian guides", "url":
+                "https://docs.pyro.ai/en/stable/infer.autoguide.html#pyro.infer.autoguide.AutoMultivariateNormal"})
+            case["sources"] = [*case["sources"], inference_source]
+            if case_id in {"robust-regression", "interaction-regression", "eight-schools"}:
+                case["notes"] = [*case["notes"],
+                    'The saved result uses guide="full" (Pyro-backed VI). Choose guide="diagonal" for Smallprob\'s independent Normal guide implemented directly in Torch; it cannot learn posterior correlations.']
+            # The download contains exactly the displayed steps, plus the
+            # final diagram command from the original standalone recipe.
+            diagram_command = DIAGRAM_CODE[case_id]
+            case["run"] = "\n\n".join(step["smallprob"] for step in case["workflows"]) + "\n" + diagram_command
             observed = ["measurement"] if case_id == "weighing-scale" else ["y"]
             labels = ({"weight": "w", "measurement": "y"} if case_id == "weighing-scale" else
                       {"intercept": "b", "slope": "m", "group_effect": "a", "interaction": "c"})
@@ -216,13 +173,22 @@ def build(destination=SITE):
             diagram_path.write_text(re.sub(r"<dc:date>.*?</dc:date>", "", diagram_path.read_text()))
             if plot_prefix:
                 plot_cell = _cell(notebook, plot_prefix)
-                images = [output["data"]["image/png"] for output in plot_cell.outputs
-                          if "image/png" in output.get("data", {})]
+                images = [output["data"] for output in plot_cell.outputs
+                          if any(mime in output.get("data", {}) for mime in ("image/svg+xml", "image/png"))]
                 if len(images) != 1:
                     raise ValueError(f"Expected one saved plot for {case_id}")
-                case["plot"] = f"assets/plots/{case_id}.png"
-                (destination / case["plot"]).write_bytes(base64.b64decode(images[0]))
+                if "image/svg+xml" in images[0]:
+                    case["plot"] = f"assets/plots/{case_id}.svg"
+                    (destination / case["plot"]).write_text(images[0]["image/svg+xml"])
+                    # Keep a high-resolution raster companion for downloads
+                    # and tools that cannot embed SVG; never leave a stale PNG.
+                    if "image/png" in images[0]:
+                        (destination / f"assets/plots/{case_id}.png").write_bytes(base64.b64decode(images[0]["image/png"]))
+                else:
+                    case["plot"] = f"assets/plots/{case_id}.png"
+                    (destination / case["plot"]).write_bytes(base64.b64decode(images[0]["image/png"]))
             (destination / case["download"]).write_text(download_source(case))
+            (destination / case["pyro_download"]).write_text(pyro_download_source(case))
             cases.append(case)
     checks = comparison_checks()
     if not all(check["passed"] for check in checks):
@@ -232,7 +198,7 @@ def build(destination=SITE):
         "dtype": "float64", "tolerance": 1e-10, "checks": checks,
         "passed": True, "max_absolute_log_joint_error": max(check["absolute_error"] for check in checks),
         "notebook_sha256": provenance,
-        "plot_provenance": "PNG outputs copied from executed committed notebooks. VI fits are not rerun by this build.",
+        "plot_provenance": "SVG outputs (or PNG fallback) copied from executed committed notebooks. VI fits are not rerun by this build.",
         "adaptations": "Interaction noise prior and Eight Schools scale prior are adapted; both displayed code panes use the same adapted law.",
     }
     (destination / "assets/comparison-validation.json").write_text(json.dumps(evidence, indent=2) + "\n")

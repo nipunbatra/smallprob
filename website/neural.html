@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Train a variational autoencoder with Smallprob and compare the complete workflow with Pyro. Inspect learning curves, reconstructions, and generated samples.">
+  <meta name="theme-color" content="#fffefa">
+  <title>A variational autoencoder · Smallprob</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=0.6.0">
+  <script src="neural.js?v=0.6.0" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#neural-example">Skip to the VAE example</a>
+  <div class="site-shell">
+  <header class="site-header">
+    <a class="wordmark" href="./" aria-label="Smallprob home">smallprob<span>.</span></a>
+    <p class="site-byline">A project by<br><a href="https://nipunbatra.github.io/">Nipun Batra</a></p>
+    <nav class="top-nav" aria-label="Main navigation">
+      <a href="./#examples">Examples</a>
+      <a href="neural.html" aria-current="page">Neural models</a>
+      <a href="meanfield.html">Mean-field VI</a>
+      <a href="./#get-started">Get started</a>
+      <a href="./#notebooks">Notebooks</a>
+      <a href="https://github.com/nipunbatra/smallprob">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+    <p class="rail-note">Python models.<br>NumPy &amp; PyTorch arrays.<br>Explicit inference.</p>
+  </header>
+
+  <main class="page-width">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="intro-copy">
+        <p class="eyebrow">Neural generative models</p>
+        <h1 id="page-title">Learn a<br>latent space.</h1>
+        <p class="intro-lead">A variational autoencoder uses neural networks for both generation and inference. Train it, reconstruct held-out examples, and sample new observations.</p>
+        <div class="intro-links"><a href="./#linear-regression">← Back to probabilistic models</a><a href="meanfield.html">How mean-field VI works →</a></div>
+      </div>
+      <div class="intro-aside math-aside">
+        <p><strong>Generation</strong><br>z ∼ p(z), &nbsp; x ∼ p<sub>θ</sub>(x | z)</p>
+        <p><strong>Inference</strong><br>q<sub>φ</sub>(z | x) = ∏<sub>j</sub> Normal(μ<sub>φ,j</sub>(x), σ<sub>φ,j</sub>(x)<sup>2</sup>)</p>
+        <p class="intro-detail">The encoder predicts a different approximate posterior for each observation.</p>
+      </div>
+    </section>
+
+    <section class="neural-example" id="neural-example" aria-labelledby="neural-title">
+      <div id="neural-load" class="load-state" role="status"><p>Loading the executed VAE example…</p><div class="skeleton skeleton-title" aria-hidden="true"></div><div class="skeleton skeleton-code" aria-hidden="true"></div></div>
+      <noscript><p>This comparison needs JavaScript. <a href="https://github.com/nipunbatra/smallprob/tree/main/examples">Read the runnable examples on GitHub.</a></p></noscript>
+      <div id="neural-content" hidden>
+        <header class="case-heading"><div><p class="eyebrow">A worked machine learning example</p><h2 id="neural-title">A variational autoencoder</h2></div><span class="method-badge">Amortized mean-field VI</span></header>
+        <p id="neural-description" class="case-description"></p>
+        <p id="neural-data-note" class="comparison-note"></p>
+        <div id="neural-equations" class="equation-lines" aria-label="Model and objective equations" hidden></div>
+        <section class="model-section" aria-labelledby="workflow-title">
+          <div class="section-heading"><h3 id="workflow-title" class="section-label">From data to a generative model</h3><div id="neural-downloads" class="download-links"></div></div>
+          <div id="neural-tabs" class="workflow-tabs" role="tablist" aria-label="VAE workflow steps"></div>
+          <div id="neural-comparison" role="tabpanel" tabindex="0">
+            <div class="comparison-grid">
+              <div class="code-panel code-panel-smallprob"><div class="code-heading"><div><h4>Smallprob</h4><p class="code-method">Explicit neural helper · PyTorch</p></div><button class="copy-button" type="button" data-copy="neural-smallprob" aria-label="Copy Smallprob VAE code">Copy code</button></div><pre tabindex="0" aria-label="Smallprob VAE workflow code"><code id="neural-smallprob"></code></pre></div>
+              <div class="code-panel"><div class="code-heading"><div><h4>Pyro</h4><p class="code-method">Model, guide &amp; stochastic VI</p></div><button class="copy-button" type="button" data-copy="neural-pyro" aria-label="Copy Pyro VAE code">Copy code</button></div><pre tabindex="0" aria-label="Pyro VAE workflow code"><code id="neural-pyro"></code></pre></div>
+            </div>
+            <p id="neural-step-note" class="comparison-note"></p>
+          </div>
+          <p class="comparison-note">The encoder and decoder are ordinary PyTorch modules. The neural helper is a separate API from Smallprob’s <code>@model</code> declarations. Both versions expose the same modelling choices.</p>
+        </section>
+        <section class="result-section" aria-labelledby="results-title"><h3 id="results-title" class="section-label">Measured results</h3><p id="neural-results-note" class="comparison-note"></p><dl id="neural-metrics" class="metric-list"></dl><div id="neural-figures" class="neural-figures"></div></section>
+        <section class="notes-section" aria-labelledby="scope-title"><h3 id="scope-title" class="section-label">What this example supports</h3><ul id="neural-scope" class="model-notes"></ul><div id="neural-sources" class="source-links" aria-label="VAE references"></div></section>
+      </div>
+    </section>
+    <section class="neural-next" aria-labelledby="next-title"><h2 id="next-title">Choose the inference for the task.</h2><div class="neural-next-grid"><div><h3>Parameters &amp; uncertainty</h3><p>Use regression and hierarchical models to learn global parameters, then read posterior means and intervals.</p><a href="./#interaction-regression">Explore Bayesian regression →</a></div><div><h3>Representations &amp; generation</h3><p>The VAE encoder learns an inference rule that generalizes to new inputs. Its decoder turns latent samples into observations.</p><a href="meanfield.html">Understand the independent Normal guide →</a></div></div></section>
+  </main>
+  <footer class="site-footer"><p>Smallprob · a personal modelling toolkit</p><a href="https://nipunbatra.github.io/">Nipun Batra</a><a href="https://github.com/nipunbatra/smallprob">Source &amp; tests ↗</a></footer>
+  </div>
+  <div id="copy-status" class="copy-status" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

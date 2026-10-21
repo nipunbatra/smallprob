@@ -3,3 +3,6 @@ website/assets/cases.js linguist-generated=true
 website/notebooks/*.html linguist-generated=true
 website/downloads/*.ipynb linguist-generated=true
 website/downloads/examples/*.py linguist-generated=true
+website/assets/plots/*.svg linguist-generated=true -whitespace
+website/assets/meanfield/*.svg linguist-generated=true -whitespace
+website/assets/vae/*.svg linguist-generated=true -whitespace

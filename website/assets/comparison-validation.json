@@ -175,9 +175,9 @@
   "passed": true,
   "max_absolute_log_joint_error": 1.4210854715202004e-14,
   "notebook_sha256": {
-    "smallprob_examples.ipynb": "979d433f456c0b9e19352c617b4ce85f44731f1cdefe8cba9a1ae18e9f118d0f",
-    "smallprob_pyro_gallery.ipynb": "8726ee75ca7f95f6d2bc07c811231dde827461b796a9595574621abac931e615"
+    "smallprob_pyro_gallery.ipynb": "d69f20849c93170b1540e733f54993fe7a1ae29f4635bb7e59bbaefc50d3f499",
+    "smallprob_examples.ipynb": "594b7ad07515b53995399f687b3662e1ad7be2c40cc4d14ab46b05f5e269fd04"
   },
-  "plot_provenance": "PNG outputs copied from executed committed notebooks. VI fits are not rerun by this build.",
+  "plot_provenance": "SVG outputs (or PNG fallback) copied from executed committed notebooks. VI fits are not rerun by this build.",
   "adaptations": "Interaction noise prior and Eight Schools scale prior are adapted; both displayed code panes use the same adapted law."
 }

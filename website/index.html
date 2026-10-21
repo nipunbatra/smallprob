@@ -3,46 +3,55 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Smallprob: simple Python declarations for probabilistic models. Explore seven runnable examples with model diagrams, inference results, and Pyro comparisons.">
-  <meta name="theme-color" content="#f6f5f0">
-  <title>Smallprob — models, simply written</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="assets/cases.js" defer></script>
-  <script src="app.js" defer></script>
+  <meta name="description" content="Smallprob: simple Python for probabilistic models. Compare data generation, inference, and posterior summaries with Pyro, then explore neural generative models.">
+  <meta name="theme-color" content="#fffefa">
+  <title>Smallprob · probabilistic modelling in Python</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=0.6.0">
+  <script src="assets/cases.js?v=0.6.0" defer></script>
+  <script src="app.js?v=0.6.0" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#examples">Skip to examples</a>
-  <header class="site-header page-width">
-    <a class="wordmark" href="./" aria-label="Smallprob home">
-      <svg class="brand-mark" width="29" height="29" viewBox="0 0 29 29" fill="none" aria-hidden="true"><path d="M7 7 22 14.5 7 22V7Z" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="3.2" fill="currentColor"/><circle cx="7" cy="22" r="3.2" fill="currentColor"/><circle cx="22" cy="14.5" r="3.2" fill="currentColor"/></svg>
-      <span>smallprob<span class="wordmark-dot">.</span></span>
-    </a>
+  <div class="site-shell">
+  <header class="site-header">
+    <a class="wordmark" href="./" aria-label="Smallprob home">smallprob<span>.</span></a>
+    <p class="site-byline">A project by<br><a href="https://nipunbatra.github.io/">Nipun Batra</a></p>
     <nav class="top-nav" aria-label="Main navigation">
+      <a href="#examples" aria-current="page">Examples</a>
+      <a href="neural.html">Neural models</a>
+      <a href="meanfield.html">Mean-field VI</a>
       <a href="#get-started">Get started</a>
-      <a href="https://github.com/nipunbatra/smallprob">Library on GitHub <span aria-hidden="true">↗</span></a>
+      <a href="#notebooks">Notebooks</a>
+      <a href="https://github.com/nipunbatra/smallprob">GitHub <span aria-hidden="true">↗</span></a>
     </nav>
+    <p class="rail-note">Python models.<br>NumPy &amp; PyTorch arrays.<br>Explicit inference.</p>
   </header>
 
   <main class="page-width">
     <section class="intro" aria-labelledby="page-title">
       <div class="intro-copy">
-        <p class="eyebrow">A small language for probability</p>
-        <h1 id="page-title">Models, simply written.</h1>
-        <p class="intro-lead">Write down the relationships. Generate data, infer what is hidden, and draw the model.</p>
+        <p class="eyebrow">Probabilistic modelling in Python</p>
+        <h1 id="page-title">Write a model.<br>Fit it. Use it.</h1>
+        <p class="intro-lead">Start with a distribution, a regression, or a sequence of hidden states. Generate data and fit the model with the same simple notation.</p>
+        <div class="intro-links"><a href="#examples">Compare the complete workflow ↓</a><a href="neural.html">Build a variational autoencoder →</a></div>
       </div>
       <div class="intro-aside">
         <p class="intro-code"><code>y = Normal(b + m * x, sigma)</code></p>
-        <p>Ordinary Python. Automatic observations.<br>Native NumPy or PyTorch arrays.</p>
-        <p class="intro-detail">Exact inference where supported.<br>Pyro and PyTorch underneath variational inference.</p>
+        <p>Multiple observations, automatically.</p>
+        <p class="intro-detail">Exact inference for supported models.<br>PyTorch for variational inference.</p>
       </div>
     </section>
 
     <section class="gallery" id="examples" aria-labelledby="gallery-title">
       <aside class="case-sidebar">
-        <div class="sidebar-heading"><h2 id="gallery-title">Explore the models</h2><span id="case-count" aria-label="Number of examples">07</span></div>
-        <div id="case-tabs" class="case-tabs" role="tablist" aria-label="Model examples" aria-orientation="vertical"></div>
-        <p class="sidebar-note">Each example includes a model, runnable code, a diagram, and an inference result.</p>
-        <a class="text-link notebook-link" href="notebooks/intro.html">Read the introductory notebook <span aria-hidden="true">↗</span></a>
+        <div class="sidebar-heading"><h2 id="gallery-title">Worked examples</h2><span id="case-count" aria-label="Number of examples">07</span></div>
+        <div id="case-tabs" class="case-tabs" role="tablist" aria-label="Model examples" aria-orientation="horizontal"></div>
+        <p class="sidebar-note">Choose a model, then compare every step with Pyro.</p>
+
       </aside>
 
       <div class="case-main">
@@ -60,32 +69,31 @@
           <p id="case-description" class="case-description"></p>
 
           <section class="model-section" aria-labelledby="declarations-title">
-            <h3 id="declarations-title" class="section-label">01 / Write the model</h3>
-            <div class="comparison-grid">
-              <div class="code-panel code-panel-smallprob">
-                <div class="code-heading"><h4>Smallprob</h4><button class="copy-button" type="button" data-copy="smallprob-code" aria-label="Copy Smallprob model code">Copy code</button></div>
-                <pre tabindex="0" aria-label="Smallprob model declaration"><code id="smallprob-code"></code></pre>
+            <div class="section-heading"><h3 id="declarations-title" class="section-label">The complete workflow</h3><div class="download-links"><a id="example-download" class="text-link" href="downloads/examples/normal-mean.py" download>Smallprob .py ↓</a><a id="pyro-download" class="text-link" href="https://github.com/nipunbatra/smallprob">Pyro .py ↓</a></div></div>
+            <div id="workflow-tabs" class="workflow-tabs" role="tablist" aria-label="Steps in the modelling workflow"></div>
+            <div id="comparison-panel" role="tabpanel" tabindex="0">
+              <div class="comparison-grid">
+                <div class="code-panel code-panel-smallprob">
+                  <div class="code-heading"><div><h4>Smallprob</h4><p id="smallprob-method" class="code-method"></p></div><button class="copy-button" type="button" data-copy="smallprob-code" aria-label="Copy Smallprob code">Copy code</button></div>
+                  <pre tabindex="0" aria-label="Smallprob workflow code"><code id="smallprob-code"></code></pre>
+                </div>
+                <div class="code-panel">
+                  <div class="code-heading"><div><h4>Pyro</h4><p id="pyro-method" class="code-method"></p></div><button class="copy-button" type="button" data-copy="pyro-code" aria-label="Copy Pyro code">Copy code</button></div>
+                  <pre tabindex="0" aria-label="Equivalent Pyro workflow code"><code id="pyro-code"></code></pre>
+                </div>
               </div>
-              <div class="code-panel">
-                <div class="code-heading"><h4>Pyro equivalent</h4><button class="copy-button" type="button" data-copy="pyro-code" aria-label="Copy equivalent Pyro model code">Copy code</button></div>
-                <pre tabindex="0" aria-label="Equivalent Pyro model declaration"><code id="pyro-code"></code></pre>
-              </div>
+              <p id="workflow-note" class="comparison-note"></p>
             </div>
-            <p class="comparison-note">These compare model declarations. Smallprob inference setup and data are in the runnable example. Pyro supports a much broader range of programs; Smallprob uses it for variational inference.</p>
-          </section>
-
-          <section class="run-section" aria-labelledby="run-title">
-            <div class="section-heading"><h3 id="run-title" class="section-label">02 / Generate, infer, draw</h3><a id="example-download" class="text-link" href="#" download>Download runnable example <span aria-hidden="true">↓</span></a></div>
-            <div class="code-panel run-code-panel"><div class="code-heading"><span class="code-caption">Continue in Python</span><button class="copy-button" type="button" data-copy="run-code" aria-label="Copy generate, infer, and draw code">Copy code</button></div><pre tabindex="0" aria-label="Generate data and run inference"><code id="run-code"></code></pre></div>
+            <p class="comparison-note">Read the steps in order, or download a complete script. The method under each library names the inference used; exact inference and variational inference need not give identical results. These examples use the methods labelled above. You can also use <a href="meanfield.html">independent Normal factors with native mean-field VI</a>. <a href="assets/workflow-validation.json">See the execution and inference checks.</a></p>
           </section>
 
           <section class="figure-section" aria-labelledby="diagram-title">
-            <div class="section-heading"><h3 id="diagram-title" class="section-label">03 / See the relationships</h3><a id="diagram-full" class="text-link" href="#" target="_blank" rel="noopener">Open full-size diagram <span aria-hidden="true">↗</span></a></div>
+            <div class="section-heading"><h3 id="diagram-title" class="section-label">See the relationships</h3><a id="diagram-full" class="text-link" href="#" target="_blank" rel="noopener">Open full-size diagram <span aria-hidden="true">↗</span></a></div>
             <figure class="model-figure"><a id="diagram-link" href="#" target="_blank" rel="noopener" aria-label="Open full-size model diagram"><img id="case-diagram" alt="" decoding="async"></a><figcaption>Generated from the model with <code>.diagram()</code>. Distribution symbols show the family; the equations specify its parameters.</figcaption></figure>
           </section>
 
           <section class="result-section" aria-labelledby="result-title">
-            <div class="section-heading"><h3 id="result-title" class="section-label">04 / Read the result</h3><a id="plot-full" class="text-link" href="#" target="_blank" rel="noopener">Open full-size plot <span aria-hidden="true">↗</span></a></div>
+            <div class="section-heading"><h3 id="result-title" class="section-label">Read the result</h3><a id="plot-full" class="text-link" href="#" target="_blank" rel="noopener">Open full-size plot <span aria-hidden="true">↗</span></a></div>
             <p id="case-result" class="result-text"></p>
             <figure id="plot-figure" class="result-figure"><img id="case-plot" alt="" loading="lazy" decoding="async"></figure>
           </section>
@@ -100,17 +108,23 @@
       </div>
     </section>
 
+    <section class="neural-preview" id="neural-models" aria-labelledby="neural-title">
+      <div><p class="eyebrow">Neural generative models</p><h2 id="neural-title">From regression to a VAE.</h2><p>Use an encoder to infer a latent representation and a decoder to generate observations. Follow a runnable example through training, reconstruction, and sampling.</p><a class="text-link" href="neural.html">Explore the VAE example <span aria-hidden="true">→</span></a></div>
+      <div class="neural-sketch" aria-label="The encoder maps observations x to latent z. The decoder maps latent z to reconstructed observations x."><span class="sketch-node">x</span><span class="sketch-arrow"><span>encoder q<sub>φ</sub>(z | x)</span>⟶</span><span class="sketch-node">z</span><span class="sketch-arrow"><span>decoder p<sub>θ</sub>(x | z)</span>⟶</span><span class="sketch-node">x̂</span><p>A separate neural API, using PyTorch modules.</p></div>
+    </section>
+
     <section id="get-started" class="get-started" aria-labelledby="get-started-title">
-      <div class="setup-copy"><p class="eyebrow">Keep it close to the model</p><h2 id="get-started-title">Run it locally.</h2><p>The complete library, examples, notebooks, and tests live in one small repository. Install the optional VI and notebook tools, then run the first examples.</p><a class="primary-link" href="https://github.com/nipunbatra/smallprob">Open the library on GitHub <span aria-hidden="true">↗</span></a></div>
+      <div class="setup-copy"><p class="eyebrow">Installation</p><h2 id="get-started-title">Run it locally.</h2><p>The complete library, examples, notebooks, and tests live in one small repository. Install the optional VI and notebook tools, then run the first examples.</p><a class="primary-link" href="https://github.com/nipunbatra/smallprob">Open the library on GitHub <span aria-hidden="true">↗</span></a></div>
       <div class="setup-detail"><div class="code-panel"><div class="code-heading"><span class="code-caption">Terminal · Python + uv</span><button class="copy-button" type="button" data-copy="setup-code" aria-label="Copy setup commands">Copy commands</button></div><pre tabindex="0" aria-label="Installation and run commands"><code id="setup-code">git clone https://github.com/nipunbatra/smallprob.git
 cd smallprob
 uv sync --extra vi --extra notebook --locked
 uv run --no-sync python -m examples.demo</code></pre></div><p class="setup-note">Requires <a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a>. For NumPy-only exact inference, use <code>uv sync</code>. Torch execution is optional; exact HMM inference runs on the CPU with NumPy.</p></div>
     </section>
 
-    <section class="notebook-section" aria-labelledby="notebooks-title"><div><h2 id="notebooks-title">Prefer a notebook?</h2><p>Read the executed results, or download a notebook and change the model.</p></div><div class="notebook-list"><div><span>Normal, regression, robust regression &amp; HMMs</span><p><a href="notebooks/intro.html">Read notebook <span aria-hidden="true">↗</span></a><a href="downloads/smallprob_examples.ipynb" download>Download .ipynb <span aria-hidden="true">↓</span></a></p></div><div><span>Weighing scale, interactions &amp; Eight Schools</span><p><a href="notebooks/pyro-gallery.html">Read notebook <span aria-hidden="true">↗</span></a><a href="downloads/smallprob_pyro_gallery.ipynb" download>Download .ipynb <span aria-hidden="true">↓</span></a></p></div></div></section>
+    <section class="notebook-section" id="notebooks" aria-labelledby="notebooks-title"><div><h2 id="notebooks-title">Prefer a notebook?</h2><p>Read the executed results, or download a notebook and change the model.</p></div><div class="notebook-list"><div><span>Normal, regression, robust regression &amp; HMMs</span><p><a href="notebooks/intro.html">Read notebook <span aria-hidden="true">↗</span></a><a href="downloads/smallprob_examples.ipynb" download>Download .ipynb <span aria-hidden="true">↓</span></a></p></div><div><span>Weighing scale, interactions &amp; Eight Schools</span><p><a href="notebooks/pyro-gallery.html">Read notebook <span aria-hidden="true">↗</span></a><a href="downloads/smallprob_pyro_gallery.ipynb" download>Download .ipynb <span aria-hidden="true">↓</span></a></p></div></div></section>
   </main>
-  <footer class="site-footer page-width"><p>Smallprob <span class="footer-version">v0.5</span></p><p>Simple syntax. Explicit assumptions.</p><a href="https://github.com/nipunbatra/smallprob">Source &amp; tests <span aria-hidden="true">↗</span></a></footer>
+  <footer class="site-footer"><p>Smallprob · a personal modelling toolkit</p><a href="https://nipunbatra.github.io/">Nipun Batra</a><a href="https://github.com/nipunbatra/smallprob">Source &amp; tests <span aria-hidden="true">↗</span></a></footer>
+  </div>
   <div id="copy-status" class="copy-status" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>

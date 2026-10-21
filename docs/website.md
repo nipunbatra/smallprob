@@ -1,7 +1,8 @@
 # Smallprob showcase
 
-The static site is in `website/`. It pairs Smallprob model declarations with
-equivalent, idiomatic Pyro declarations for seven small examples. Pyro's
+The static site is in `website/`. It pairs complete Smallprob and Pyro workflows for seven examples: model
+definition, data generation, fitting, and posterior use. Native mean-field VI
+and a neural VAE have separate runnable pages. Pyro's
 broader inference and modeling capabilities are outside this comparison.
 The diagrams and plots come from executed Python, and the notebooks identify
 synthetic data, published observations, exact answers and VI approximations.
@@ -18,7 +19,8 @@ python3 -m http.server 8820 --bind 127.0.0.1 --directory website
 ```
 
 Open `http://127.0.0.1:8820`. There is no Node build, JavaScript package install,
-remote font, analytics service or Python runtime in the browser. Code-copy
+analytics service or Python runtime in the browser. DM Sans is loaded from
+Google Fonts with a local sans-serif fallback, matching the personal website. Code-copy
 buttons copy Python for a local interpreter; the site does not execute it.
 
 To update numerical notebook results, run the notebook commands from the README
@@ -49,3 +51,18 @@ The Pages deployment serves the static showcase, example code and downloadable
 notebooks publicly. It does not run Python or inference on a server. Check the
 workflow's `publish` job and the `github-pages` environment for deployment
 status.
+
+## Reproduce new results
+
+```sh
+.venv/bin/python -m examples.validate_site_workflows
+.venv/bin/python -m examples.meanfield
+.venv/bin/python -m examples.build_vae_example
+.venv/bin/python -m examples.build_site
+```
+
+The first command executes all seven direct-Pyro workflows. Gaussian cases are
+compared with exact references and HMM state marginals with forward-backward;
+other VI cases have execution/finiteness checks, not a new accuracy claim.
+The native VI and VAE commands update their measured JSON and SVG/300-dpi PNG
+figures. `build_site` exports saved results, never silently trains models.

@@ -52,17 +52,26 @@ def test_site_build_preserves_executed_plot_provenance_and_runnable_downloads(tm
     assert len(cases) == 7
     for case in cases:
         assert set(case) == {"id", "title", "eyebrow", "description", "method", "smallprob", "pyro",
-                             "run", "result", "notes", "sources", "diagram", "plot", "download"}
+                             "run", "result", "notes", "sources", "diagram", "plot", "download",
+                             "pyro_download", "smallprob_method", "pyro_method", "workflows", "workflow_note"}
         assert case["result"].strip()
         assert (tmp_path / case["diagram"]).read_text().startswith("<?xml")
         if case["plot"]:
-            assert (tmp_path / case["plot"]).read_bytes().startswith(b"\x89PNG")
+            plot_bytes = (tmp_path / case["plot"]).read_bytes()
+            assert plot_bytes.startswith(b"\x89PNG") or b"<svg " in plot_bytes
         source = (tmp_path / case["download"]).read_text()
         tree = ast.parse(source)
         imports = [node.module for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)]
         assert not any(name.startswith("examples") for name in imports)
         assert case["smallprob"] in source and case["run"] in source
         compile(source, case["download"], "exec")
+        pyro_source = (tmp_path / case["pyro_download"]).read_text()
+        compile(pyro_source, case["pyro_download"], "exec")
+        assert case["pyro"] in pyro_source
+        assert [step["id"] for step in case["workflows"]] == ["generate", "fit", "summarize"]
+        for step in case["workflows"]:
+            assert step["smallprob"] in source
+            assert step["pyro"] in pyro_source
     evidence = json.loads((tmp_path / "assets/comparison-validation.json").read_text())
     assert evidence["passed"]
     for name, digest in evidence["notebook_sha256"].items():

@@ -18,6 +18,8 @@ def build():
     (site / "notebooks").mkdir(parents=True, exist_ok=True)
     (site / "downloads").mkdir(parents=True, exist_ok=True)
     build_cases()
+    from .build_meanfield_page import build as build_meanfield
+    build_meanfield()
     for name, preview in [
         ("smallprob_examples", "intro"),
         ("smallprob_pyro_gallery", "pyro-gallery"),
