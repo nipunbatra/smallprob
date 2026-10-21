@@ -1,0 +1,5 @@
+website/assets/diagrams/*.svg linguist-generated=true -whitespace
+website/assets/cases.js linguist-generated=true
+website/notebooks/*.html linguist-generated=true
+website/downloads/*.ipynb linguist-generated=true
+website/downloads/examples/*.py linguist-generated=true

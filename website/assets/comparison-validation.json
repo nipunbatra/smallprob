@@ -1,0 +1,183 @@
+{
+  "scope": "Model probability laws at three generated complete assignments per case; not inference or speed equivalence.",
+  "dtype": "float64",
+  "tolerance": 1e-10,
+  "checks": [
+    {
+      "case": "normal-mean",
+      "seed": 7,
+      "smallprob_log_joint": -2.981114559806709,
+      "pyro_log_joint": -2.981114559806709,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "normal-mean",
+      "seed": 19,
+      "smallprob_log_joint": -3.4990447430103337,
+      "pyro_log_joint": -3.4990447430103337,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "normal-mean",
+      "seed": 103,
+      "smallprob_log_joint": -4.364101493800079,
+      "pyro_log_joint": -4.364101493800079,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "linear-regression",
+      "seed": 7,
+      "smallprob_log_joint": -15.126681688270438,
+      "pyro_log_joint": -15.12668168827044,
+      "absolute_error": 1.7763568394002505e-15,
+      "passed": true
+    },
+    {
+      "case": "linear-regression",
+      "seed": 19,
+      "smallprob_log_joint": -13.90214308002848,
+      "pyro_log_joint": -13.90214308002848,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "linear-regression",
+      "seed": 103,
+      "smallprob_log_joint": -20.723342826117186,
+      "pyro_log_joint": -20.723342826117186,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "robust-regression",
+      "seed": 7,
+      "smallprob_log_joint": -9.71449876063804,
+      "pyro_log_joint": -9.714498760638053,
+      "absolute_error": 1.2434497875801753e-14,
+      "passed": true
+    },
+    {
+      "case": "robust-regression",
+      "seed": 19,
+      "smallprob_log_joint": -27.052415577315507,
+      "pyro_log_joint": -27.05241557731552,
+      "absolute_error": 1.4210854715202004e-14,
+      "passed": true
+    },
+    {
+      "case": "robust-regression",
+      "seed": 103,
+      "smallprob_log_joint": -41.383962415413905,
+      "pyro_log_joint": -41.38396241541391,
+      "absolute_error": 7.105427357601002e-15,
+      "passed": true
+    },
+    {
+      "case": "hidden-markov-model",
+      "seed": 7,
+      "smallprob_log_joint": -28.01203664584699,
+      "pyro_log_joint": -28.012036645846994,
+      "absolute_error": 3.552713678800501e-15,
+      "passed": true
+    },
+    {
+      "case": "hidden-markov-model",
+      "seed": 19,
+      "smallprob_log_joint": -31.275125645271412,
+      "pyro_log_joint": -31.275125645271416,
+      "absolute_error": 3.552713678800501e-15,
+      "passed": true
+    },
+    {
+      "case": "hidden-markov-model",
+      "seed": 103,
+      "smallprob_log_joint": -30.383377878919475,
+      "pyro_log_joint": -30.383377878919468,
+      "absolute_error": 7.105427357601002e-15,
+      "passed": true
+    },
+    {
+      "case": "weighing-scale",
+      "seed": 7,
+      "smallprob_log_joint": -1.5948201986868178,
+      "pyro_log_joint": -1.5948201986868178,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "weighing-scale",
+      "seed": 19,
+      "smallprob_log_joint": -2.112750381890444,
+      "pyro_log_joint": -2.112750381890444,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "weighing-scale",
+      "seed": 103,
+      "smallprob_log_joint": -2.9778071326801867,
+      "pyro_log_joint": -2.9778071326801867,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "interaction-regression",
+      "seed": 7,
+      "smallprob_log_joint": -29.378259573813956,
+      "pyro_log_joint": -29.37825957381396,
+      "absolute_error": 3.552713678800501e-15,
+      "passed": true
+    },
+    {
+      "case": "interaction-regression",
+      "seed": 19,
+      "smallprob_log_joint": -44.81106181544616,
+      "pyro_log_joint": -44.811061815446166,
+      "absolute_error": 7.105427357601002e-15,
+      "passed": true
+    },
+    {
+      "case": "interaction-regression",
+      "seed": 103,
+      "smallprob_log_joint": -69.08326718511908,
+      "pyro_log_joint": -69.0832671851191,
+      "absolute_error": 1.4210854715202004e-14,
+      "passed": true
+    },
+    {
+      "case": "eight-schools",
+      "seed": 7,
+      "smallprob_log_joint": -43.88872460121798,
+      "pyro_log_joint": -43.88872460121798,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "eight-schools",
+      "seed": 19,
+      "smallprob_log_joint": -46.68766101176864,
+      "pyro_log_joint": -46.68766101176864,
+      "absolute_error": 0.0,
+      "passed": true
+    },
+    {
+      "case": "eight-schools",
+      "seed": 103,
+      "smallprob_log_joint": -51.7321661062053,
+      "pyro_log_joint": -51.7321661062053,
+      "absolute_error": 0.0,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "max_absolute_log_joint_error": 1.4210854715202004e-14,
+  "notebook_sha256": {
+    "smallprob_examples.ipynb": "979d433f456c0b9e19352c617b4ce85f44731f1cdefe8cba9a1ae18e9f118d0f",
+    "smallprob_pyro_gallery.ipynb": "8726ee75ca7f95f6d2bc07c811231dde827461b796a9595574621abac931e615"
+  },
+  "plot_provenance": "PNG outputs copied from executed committed notebooks. VI fits are not rerun by this build.",
+  "adaptations": "Interaction noise prior and Eight Schools scale prior are adapted; both displayed code panes use the same adapted law."
+}

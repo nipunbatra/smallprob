@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "smallprob"
+version = "0.5.0"
+description = "Small Python generative models with exact inference and optional variational inference"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.24,<3", "array-api-compat>=1.12,<2"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+torch = ["torch>=2,<3"]
+vi = ["pyro-ppl>=1.9,<2"]
+viz = ["matplotlib>=3.8,<4"]
+notebook = ["matplotlib>=3.8,<4", "nbformat>=5.10,<6", "nbclient>=0.10,<1", "ipykernel>=6,<8"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/smallprob"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
